@@ -4,7 +4,24 @@ import connectDB from "./db/index.js";
 
 dotenv.config();
 
-connectDB();
+connectDB()
+.then(() => {
+    app.listen(process.env.PORT || 8000, () => {
+        //logs server start
+        console.log(`Server is running at port : ${process.env.PORT}`);
+        //handles run time errors
+        app.on("error", (error) => { 
+            console.log("ERROR: ", error); /// logs error 
+        throw error; // crash app
+            
+        })
+    })
+})
+//if mongodb fails server will not start - > catch errors and log them 
+.catch((err) => {
+    console.log("MONGO db connection FAILED!!!! ", err);
+    
+})
 
 
 
@@ -29,6 +46,7 @@ connectDB();
 
 
 /*
+// this can also be used but not a professional approach
 import mongoose from "mongoose";
 import { DB_NAME } from "./constants";
 import express from "express";
